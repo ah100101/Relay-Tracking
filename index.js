@@ -3,7 +3,7 @@ import moment from 'moment'
 
 let date = '2019-05-17'
 // let mockNow = ``
-let mockNow = `2019-04-19T06:30:00-05:00`
+let mockNow = `2019-05-17T06:31:00-05:00`
 
 const legIndices = [
   // leg 1
@@ -29,8 +29,13 @@ const legIndices = [
   }
 ]
 
-const formatSheetTime = (time) => {
+const formatSheetTime = time => {
   return `${date}T${moment(time, 'hh:mm:ss a').format('HH:mm:ss')}-05:00`
+}
+
+const formatPace = decimal => {
+  let minutes = decimal % 1 * 60
+  return `${Math.floor(decimal)}:${minutes.toString().length === 1 ? '00' : minutes}`
 }
 
 const setLeg = function (indices, sheet) {
@@ -38,6 +43,7 @@ const setLeg = function (indices, sheet) {
     let leg = {
       runner: r[0],
       pace: r[1],
+      formattedPace: formatPace(r[1]),
       distance: r[indices.distance],
       start: formatSheetTime(r[indices.start])
     }
@@ -75,8 +81,6 @@ var app = new Vue({
         state.firstLeg = setLeg(legIndices[0], data)
         state.secondLeg = setLeg(legIndices[1], data)
         state.thirdLeg = setLeg(legIndices[2], data)
-        console.log(state.currentLeg)
-        console.log(state.nextLeg)
       })
       .catch(error => console.log(error))
   },
@@ -85,7 +89,7 @@ var app = new Vue({
       return mockNow ? moment(mockNow) : this.current
     },
     startDateTime: function () {
-      return moment(`2019-04-19T${this.startTime}-05:00`)
+      return moment(`2019-05-17T${this.startTime}-05:00`)
     },
     stopwatch: function () {
       return this.now.diff(this.startDateTime)
@@ -106,7 +110,10 @@ var app = new Vue({
       return this.legs.filter(l => moment(l.start) <= this.now && this.now < moment(l.finish))[0]
     },
     nextLeg: function () {
-      return this.legs.filter(l => this.now < moment(l.start))[0]
+      return this.legs.filter(l => moment(l.start) > this.now)[0]
+    },
+    previousLeg: function () {
+      return this.legs.filter(l => moment(l.start) < this.now)[0]
     }
   }
 })
