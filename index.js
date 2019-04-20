@@ -1,5 +1,6 @@
 import './styles.scss'
 import moment from 'moment'
+import midwest from './data/midwest.json'
 
 let date = '2019-05-17'
 // let mockNow = ``
@@ -83,6 +84,8 @@ var app = new Vue({
         state.thirdLeg = setLeg(legIndices[2], data)
       })
       .catch(error => console.log(error))
+
+    console.log(midwest)
   },
   computed: {
     now: function () {
