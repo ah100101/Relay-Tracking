@@ -49,7 +49,8 @@ const setLeg = function (indices, sheet) {
       start: formatSheetTime(r[indices.start])
     }
 
-    // increment the day if it has flipped
+    // increment the day if it has flipped, this is jank as fuck
+    // http://www.reactiongifs.com/r/whid1.gif
     if (r[indices.start].indexOf('PM') >= 0 && r[indices.projected].indexOf('AM') >= 0) {
       date = '2019-05-18'
     }
@@ -70,31 +71,33 @@ var app = new Vue({
   },
   created () {
     setInterval(() => {
+      date = '2019-05-17'
       this.current = moment()
+      let state = this
+      fetch('https://sheets.googleapis.com/v4/spreadsheets/1BZi6E1iPDVFPzowFPNIMXizi1DCrFuF0FYcDeLZ8RRs/values/Sheet1!B2:Q13?key=AIzaSyBIAuNXg5viSRY2d8-dnD6pssHxLQ-07Ew')
+        .then(response => response.json())
+        .then(data => {
+          state.startTime = '0' + data.values[0][3].replace(' AM', '')
+          state.legs = setLeg(legIndices[0], data)
+            .concat(setLeg(legIndices[1], data))
+            .concat(setLeg(legIndices[2], data))
+            .map((r, index) => {
+              r.id = midwest[index].id
+              r.mapData = midwest[index]
+              return r
+            })
+        })
+        .catch(error => console.log(error))
     }, 1000)
-    let state = this
-    fetch('https://sheets.googleapis.com/v4/spreadsheets/1BZi6E1iPDVFPzowFPNIMXizi1DCrFuF0FYcDeLZ8RRs/values/Sheet1!B2:Q13?key=AIzaSyBIAuNXg5viSRY2d8-dnD6pssHxLQ-07Ew')
-      .then(response => response.json())
-      .then(data => {
-        state.startTime = '0' + data.values[0][3].replace(' AM', '')
-        state.legs = setLeg(legIndices[0], data)
-          .concat(setLeg(legIndices[1], data))
-          .concat(setLeg(legIndices[2], data))
-          .map((r, index) => {
-            r.id = midwest[index].id
-            r.mapData = midwest[index]
-            return r
-          })
-      })
-      .catch(error => console.log(error))
+    
   },
   methods: {
     getLegClass: function (id) {
-      if (id === this.currentLeg.id) {
+      if (this.currentLeg && id === this.currentLeg.id) {
         return 'current-runner'
-      } else if (id === this.nextLeg.id) {
+      } else if (this.nextLeg && id === this.nextLeg.id) {
         return 'next-runner'
-      } else if (id > this.nextLeg.id) {
+      } else if (this.nextLeg && id > this.nextLeg.id) {
         return 'upcoming-runner'
       }
       return 'previous-runner'
