@@ -15,8 +15,9 @@
         Time since: {{ formattedStopwatch }}
       </div>
       <div>
-        <div v-for='leg in legs'>
-          <div class='leg'>
+        <div v-for='leg in legs'
+            class='leg' 
+            v-bind:class='getLegClass(leg.id)'>
             <div>
               Runner: {{ leg.runner }}
             </div>
@@ -32,7 +33,6 @@
             <div>
               Finish: {{ leg.finish }}
             </div>
-          </div>
         </div>
       </div>
     </div>
