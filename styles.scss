@@ -7,3 +7,19 @@ body {
 .leg {
   padding: 1rem;
 }
+
+.current-runner {
+  background-color: lightgreen;
+}
+
+.next-runner {
+  background-color: lightblue;
+}
+
+.upcoming-runner {
+  background-color: lightgrey;
+}
+
+.previous-runner {
+  background-color: slategrey;
+}
