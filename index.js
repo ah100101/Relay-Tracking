@@ -4,7 +4,7 @@ import midwest from './data/midwest.json'
 
 let date = '2019-05-17'
 // let mockNow = ``
-let mockNow = `2019-05-17T06:31:00-05:00`
+let mockNow = `2019-05-17T09:05:00-05:00`
 
 const legIndices = [
   // leg 1
@@ -66,9 +66,7 @@ var app = new Vue({
   data: {
     current: moment(),
     startTime: '06:30:00',
-    firstLeg: [],
-    secondLeg: [],
-    thirdLeg: []
+    legs: []
   },
   created () {
     setInterval(() => {
@@ -79,13 +77,28 @@ var app = new Vue({
       .then(response => response.json())
       .then(data => {
         state.startTime = '0' + data.values[0][3].replace(' AM', '')
-        state.firstLeg = setLeg(legIndices[0], data)
-        state.secondLeg = setLeg(legIndices[1], data)
-        state.thirdLeg = setLeg(legIndices[2], data)
+        state.legs = setLeg(legIndices[0], data)
+          .concat(setLeg(legIndices[1], data))
+          .concat(setLeg(legIndices[2], data))
+          .map((r, index) => {
+            r.id = midwest[index].id
+            r.mapData = midwest[index]
+            return r
+          })
       })
       .catch(error => console.log(error))
-
-    console.log(midwest)
+  },
+  methods: {
+    getLegClass: function (id) {
+      if (id === this.currentLeg.id) {
+        return 'current-runner'
+      } else if (id === this.nextLeg.id) {
+        return 'next-runner'
+      } else if (id > this.nextLeg.id) {
+        return 'upcoming-runner'
+      }
+      return 'previous-runner'
+    }
   },
   computed: {
     now: function () {
@@ -106,17 +119,11 @@ var app = new Vue({
     formattedStartTime: function () {
       return this.startDateTime.format('MMMM Do YYYY, h:mm:ss A')
     },
-    legs: function () {
-      return this.firstLeg.concat(this.secondLeg).concat(this.thirdLeg)
-    },
     currentLeg: function () {
       return this.legs.filter(l => moment(l.start) <= this.now && this.now < moment(l.finish))[0]
     },
     nextLeg: function () {
       return this.legs.filter(l => moment(l.start) > this.now)[0]
-    },
-    previousLeg: function () {
-      return this.legs.filter(l => moment(l.start) < this.now)[0]
     }
   }
 })
