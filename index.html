@@ -3,6 +3,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   </head>
   <body>
+    <div id="map"></div>
     <div id="app">
       <h1>Relay Tracker</h1>
       <div>
@@ -33,9 +34,19 @@
             <div>
               Finish: {{ leg.finish }}
             </div>
+            <div>
+              Start Location {{ getLegStartLocation(leg).lat }} , {{ getLegStartLocation(leg).long }}
+            </div>
+            <a href='#' type='button' v-on:click='goToStart(leg)'>
+              Go to Start Location
+            </a>
         </div>
       </div>
     </div>
+    <script>
+      
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBScXO8Zhk3DFLWdEHSdwhtaDhlS4d6mlI"></script>
     <script src="./index.js"></script>
   </body>
 </html>
