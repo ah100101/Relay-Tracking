@@ -2,6 +2,13 @@ import './styles.scss'
 import moment from 'moment'
 import midwest from './data/midwest.json'
 
+function initMap() {
+  return new google.maps.Map(document.getElementById('map'), {
+    center: { lat: 42.61291, lng: -88.0402219 },
+    zoom: 9
+  })
+}
+
 let date = '2019-05-17'
 // let mockNow = ``
 let mockNow = `2019-05-17T09:05:00-05:00`
@@ -65,11 +72,14 @@ const setLeg = function (indices, sheet) {
 var app = new Vue({
   el: '#app',
   data: {
+    courseDrawn: false,
+    map: {},
     current: moment(),
     startTime: '06:30:00',
     legs: []
   },
   created () {
+    this.map = initMap()
     setInterval(() => {
       date = '2019-05-17'
       this.current = moment()
@@ -86,12 +96,64 @@ var app = new Vue({
               r.mapData = midwest[index]
               return r
             })
+          state.drawEntireCourse()
         })
         .catch(error => console.log(error))
     }, 1000)
     
   },
   methods: {
+    goToStart: function (leg) {
+      let start = this.getLegStartLocation(leg)
+      let coord = {
+        lat: parseFloat(start.lat),
+        lng: parseFloat(start.long)
+      }
+      this.map.setZoom(12)
+      this.map.setCenter(new google.maps.LatLng(coord))
+    },
+    getLegStartLocation: function (leg) {
+      return {
+        lat: leg.mapData.start_point.lat,
+        long: leg.mapData.start_point.long
+      }
+    },
+    drawEntireCourse: function () {
+      if (!this.courseDrawn) {
+
+        let allPoints = this.legs.map(l =>
+          l.mapData.points.map(p => ({
+              lat: parseFloat(p.lat),
+              lng: parseFloat(p.lon)
+            }))
+        )
+        
+        let state = this
+
+        allPoints.forEach(function (pointArray, index) {
+
+          var marker = new google.maps.Marker({
+            position: pointArray[0],
+            map: state.map,
+            title: 'Leg ' + (index + 1)
+          })
+
+          marker.setMap(state.map)
+
+          var flightPath = new google.maps.Polyline({
+            path: pointArray,
+            geodesic: true,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+          })
+        
+          flightPath.setMap(state.map)
+        })
+
+        this.courseDrawn = true
+      }
+    },
     getLegClass: function (id) {
       if (this.currentLeg && id === this.currentLeg.id) {
         return 'current-runner'
