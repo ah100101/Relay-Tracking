@@ -73,7 +73,8 @@
 
             <div class='leg' v-cloak>
               <div is='card' 
-                  inline-template 
+                  inline-template
+                  v-if='legs && leg'
                   v-for='leg in legs'
                   v-bind:class='getLegClass(leg.id)'
                   v-bind:leg='leg'>
