@@ -130,7 +130,13 @@ const card = Vue.component('card', {
   },
   computed: {
     reallyOpen: function () {
-      return (this.open || this.$root.currentLeg.id === this.leg.id || this.$root.nextLeg.id === this.leg.id)
+      if (!this.$root || !this.$root.currentLeg || !this.$root.nextLeg || !this.leg) {
+        return false
+      }
+      
+      return (this.open || 
+              this.$root.currentLeg.id === this.leg.id || 
+              this.$root.nextLeg.id === this.leg.id)
     },
     getGoogleLink: function () {
       return `https://maps.google.com/maps/search/?api=1&query=${this.leg.mapData.start_point.lat},${this.leg.mapData.start_point.long}`
