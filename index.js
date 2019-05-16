@@ -11,7 +11,7 @@ function initMap() {
 
 let date = '2019-05-17'
 let mockNow = ``
-// let mockNow = `2019-05-18T12:04:50-05:00`
+// let mockNow = `2019-05-17T06:35:00-05:00`
 
 const legIndices = [
   // leg 1
@@ -130,13 +130,13 @@ const card = Vue.component('card', {
   },
   computed: {
     reallyOpen: function () {
-      if (!this.$root || !this.$root.currentLeg || !this.$root.nextLeg || !this.leg) {
+      if (!this.$root || !this.leg) {
         return false
       }
       
       return (this.open || 
-              this.$root.currentLeg.id === this.leg.id || 
-              this.$root.nextLeg.id === this.leg.id)
+              (this.$root.currentLeg && this.$root.currentLeg.id === this.leg.id) || 
+              (this.$root.nextLeg && this.$root.nextLeg.id === this.leg.id))
     },
     getGoogleLink: function () {
       return `https://maps.google.com/maps/search/?api=1&query=${this.leg.mapData.start_point.lat},${this.leg.mapData.start_point.long}`
@@ -178,7 +178,7 @@ var app = new Vue({
           // state.drawEntireCourse()
         })
         .catch(error => console.log(error))
-    }, 10000)
+    }, 5000)
   },
   methods: {
     goToStart: function (leg) {
@@ -270,7 +270,7 @@ var app = new Vue({
     },
     formattedStopwatch: function () {
       let duration = moment.duration(this.stopwatch)
-      return `${Math.floor(duration.asHours())}:${duration.minutes() < 10 ? 0 : ''}${duration.minutes()}:${duration.seconds() < 10 ? 0 : ''}${duration.seconds()}`
+      return `${Math.floor(duration.asHours())}:${Math.abs(duration.minutes()) < 10 ? 0 : ''}${Math.abs(duration.minutes())}:${Math.abs(duration.seconds()) < 10 ? 0 : ''}${Math.abs(duration.seconds())}`
     },
     formattedStartTime: function () {
       return this.startDateTime.format('MMMM Do YYYY, h:mm:ss A')

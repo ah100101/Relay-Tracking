@@ -15,6 +15,12 @@
     <div>
       <div class="container is-fullhd">    
         <div id="app">
+          <!-- <h2>
+            {{ now }}
+          </h2>
+          <h2>
+            {{ startDateTime }}
+          </h2> -->
           <section v-if="currentLeg" class="hero" v-cloak>
             <div class="hero-body">
               <div class="container has-text-centered">
@@ -57,7 +63,7 @@
                   <p class="title">{{ formattedStopwatch }}</p>
                 </div>
               </div>
-              <div class="level-item has-text-centered">
+              <div v-if='currentLeg' class="level-item has-text-centered">
                   <div>
                     <p class="heading">Est. Runner Finish Time</p>
                     <p v-if='currentLeg' class="title">{{ getOnlyTime(currentLeg.finish) }}</p>
