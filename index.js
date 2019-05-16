@@ -218,7 +218,7 @@ var app = new Vue({
           var marker = new google.maps.Marker({
             position: pointArray[0],
             map: state.map,
-            icon: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank.png',
+            icon: 'http://maps.google.com/mapfiles/kml/pal2/icon26.png',
             label: {
               text: (index + 1).toString(),
               color: '#000000',

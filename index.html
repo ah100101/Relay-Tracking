@@ -40,7 +40,7 @@
             </div>
           </section>
           <div class="modal" v-bind:class="{ 'is-active': mapOpen }" v-cloak>
-            <div class="modal-background"></div>
+            <div class="modal-background" v-on:click='mapOpen = false'></div>
             <div class="modal-content">
               <div id="map"></div>
             </div>
@@ -107,22 +107,25 @@
                         </div>
                         <div class="media-content">
                           <p class="title is-4">Est. Start: {{ getOnlyTime(leg.start) }}</p>
-                          <p class="subtitle is-6">Est. Finish: {{ getOnlyTime(leg.finish) }}</p>
+                          <p class="subtitle is-6">
+                            <div>Est. Finish: {{ getOnlyTime(leg.finish) }}</div>
+                            <div>Total Distance: {{ leg.distance }} miles</div>
+                            <div>Est. Pace {{ leg.formattedPace }} minutes / mile</div>
+                          </p>
                         </div>
-                      </div>
-                  
-                      <div class="content">
-                        <div>
-                          Total Distance: {{ leg.distance }} miles
-                        </div>
-                        <div>
-                          Est. Pace {{ leg.formattedPace }} minutes / mile
-                        </div>
+                        <div class="media-content">
+                            <p class="title is-5">Starting Address:</p>
+                            <p class="subtitle is-6">
+                            {{ leg.mapData.exchange_address.name }}<br/>
+                            {{ leg.mapData.exchange_address.address_1 }}<br/>
+                            {{ leg.mapData.exchange_address.city }}, {{ leg.mapData.exchange_address.state }}, {{ leg.mapData.exchange_address.postal_code }}
+                            </p>
+                          </div>
                       </div>
                     </div>
                     <footer class="card-footer" v-show='reallyOpen'>
                       <a v-on:click='goToStart(leg)' class="card-footer-item">Go to Start Location</a>
-                      <a target='_blank' v-bind:href="getGoogleLink" class="card-footer-item">Open in Google Maps</a>
+                      <!-- <a target='_blank' v-bind:href="getGoogleLink" class="card-footer-item">Open in Google Maps</a> -->
                       <a target='_blank' href="https://docs.google.com/spreadsheets/d/1BZi6E1iPDVFPzowFPNIMXizi1DCrFuF0FYcDeLZ8RRs/edit#gid=0" class="card-footer-item">Enter Actual Finish</a>
                     </footer>
                   </div>
