@@ -172,7 +172,7 @@ var app = new Vue({
           // state.drawEntireCourse()
         })
         .catch(error => console.log(error))
-    }, 1000)
+    }, 10000)
   },
   methods: {
     goToStart: function (leg) {
