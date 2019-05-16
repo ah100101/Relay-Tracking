@@ -212,9 +212,9 @@ var app = new Vue({
           var marker = new google.maps.Marker({
             position: pointArray[0],
             map: state.map,
-            icon: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank-lv.png',
+            icon: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank.png',
             label: {
-              text: 'Leg ' + (index + 1),
+              text: (index + 1),
               color: '#000000',
               fontSize: '16px',
               fontWeight: 'bold'
