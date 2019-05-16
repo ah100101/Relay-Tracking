@@ -217,7 +217,8 @@ var app = new Vue({
               text: (index + 1).toString(),
               color: '#000000',
               fontSize: '16px',
-              fontWeight: 'bold'
+              fontWeight: 'bold',
+              labelClass: "leg-label"
             }
           })
 
