@@ -139,7 +139,7 @@ const card = Vue.component('card', {
               (this.$root.nextLeg && this.$root.nextLeg.id === this.leg.id))
     },
     getGoogleLink: function () {
-      return `https://maps.google.com/maps/search/?api=1&query=${this.leg.mapData.start_point.lat},${this.leg.mapData.start_point.long}`
+      return `https://maps.google.com?q=${this.leg.mapData.start_point.lat},${this.leg.mapData.start_point.long}`
     }
   }
 })
