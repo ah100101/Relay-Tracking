@@ -10,7 +10,7 @@ function initMap() {
 }
 
 let date = '2019-05-17'
-// let mockNow = ``
+let mockNow = ``
 // let mockNow = `2019-05-18T12:04:50-05:00`
 
 const legIndices = [
