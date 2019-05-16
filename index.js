@@ -37,6 +37,45 @@ const legIndices = [
   }
 ]
 
+const images = [
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg',
+  '/hawley.8e67240a.jpg'
+]
+
 const formatSheetTime = time => {
   return `${date}T${moment(time, 'hh:mm:ss a').format('HH:mm:ss')}-05:00`
 }
@@ -71,7 +110,7 @@ const setLeg = function (indices, sheet) {
 
 const card = Vue.component('card', {
   props: [
-    'leg',
+    'leg'
   ],
   methods: {
     toggle: function () {
@@ -79,6 +118,9 @@ const card = Vue.component('card', {
     },
     getOnlyTime: function (dateTime) {
       return moment(dateTime).format('h:mm:ss A')
+    },
+    goToStart: function (leg) {
+      this.$root.goToStart(leg)
     }
   },
   data: function () {
@@ -91,7 +133,7 @@ const card = Vue.component('card', {
       return (this.open || this.$root.currentLeg.id === this.leg.id || this.$root.nextLeg.id === this.leg.id)
     },
     getGoogleLink: function () {
-      return `https://maps.google.com?query=${this.leg.mapData.start_point.lat},${this.leg.mapData.start_point.long}`
+      return `https://maps.google.com/maps/search/?api=1&query=${this.leg.mapData.start_point.lat},${this.leg.mapData.start_point.long}`
     }
   }
 })
@@ -103,13 +145,13 @@ var app = new Vue({
   },
   data: {
     courseDrawn: false,
-    map: {},
+    map: undefined,
     current: moment(),
     startTime: '06:30:00',
-    legs: []
+    legs: [],
+    mapOpen: false
   },
   created () {
-    this.map = initMap()
     setInterval(() => {
       date = '2019-05-17'
       this.current = moment()
@@ -124,16 +166,21 @@ var app = new Vue({
             .map((r, index) => {
               r.id = midwest[index].id
               r.mapData = midwest[index]
+              r.image = images[index]
               return r
             })
-          state.drawEntireCourse()
+          // state.drawEntireCourse()
         })
         .catch(error => console.log(error))
     }, 1000)
-    
   },
   methods: {
     goToStart: function (leg) {
+      this.mapOpen = true
+      if (!this.map) {
+        this.map = initMap()
+      }
+      this.drawEntireCourse()
       let start = this.getLegStartLocation(leg)
       let coord = {
         lat: parseFloat(start.lat),
@@ -153,11 +200,11 @@ var app = new Vue({
 
         let allPoints = this.legs.map(l =>
           l.mapData.points.map(p => ({
-              lat: parseFloat(p.lat),
-              lng: parseFloat(p.lon)
-            }))
+            lat: parseFloat(p.lat),
+            lng: parseFloat(p.lon)
+          }))
         )
-        
+
         let state = this
 
         allPoints.forEach(function (pointArray, index) {
@@ -165,7 +212,13 @@ var app = new Vue({
           var marker = new google.maps.Marker({
             position: pointArray[0],
             map: state.map,
-            title: 'Leg ' + (index + 1)
+            icon: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank-lv.png',
+            label: {
+              text: 'Leg ' + (index + 1),
+              color: '#000000',
+              fontSize: '16px',
+              fontWeight: 'bold'
+            }
           })
 
           marker.setMap(state.map)

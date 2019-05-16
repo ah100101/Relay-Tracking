@@ -5,27 +5,41 @@
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
   </head>
   <body>
-    <div class="section is-medium">
-      <div class="container is-fullhd">
-
-        <nav class="navbar">
-          <div class="navbar-menu">
-            <div class="navbar-start">
-              <a class="navbar-item">
-                View Runners
-              </a>
-              <a class="navbar-item">
-                Enter Actuals
-              </a>
-            </div>
-          </div>
-        </nav>
-
-        <div class="section">
-          <div id="map"></div>
-        </div>
-
+    <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+          <img src="logo.svg" alt="Run North" width="112" height="28">
+        </a>
+      </div>
+    </nav>
+    <div>
+      <div class="container is-fullhd">    
         <div id="app">
+          <section class="hero">
+            <div class="hero-body">
+              <div class="container has-text-centered">
+                <h2 class="subtitle">
+                  Current Runner
+                </h2>
+                <figure class="current-runner-image image is-128x128">
+                  <img class='is-rounded' src="/runners/hawley.jpg">
+                </figure>
+                <h2 class="title">
+                  {{ currentLeg.runner }}
+                </h2>
+                <h2 class="subtitle">
+                  Distance: {{ currentLeg.distance }} miles
+                </h2>
+              </div>
+            </div>
+          </section>
+          <div class="modal" v-bind:class="{ 'is-active': mapOpen }">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+              <div id="map"></div>
+            </div>
+            <button v-on:click="mapOpen = false" class="modal-close is-large" aria-label="close"></button>
+          </div>
           
           <div class="section">
               <section>
@@ -41,12 +55,6 @@
                 <div>
                   <p class="heading">Elapsed Time</p>
                   <p class="title">{{ formattedStopwatch }}</p>
-                </div>
-              </div>
-              <div class="level-item has-text-centered">
-                <div>
-                  <p class="heading">Current Runner</p>
-                  <p v-if="currentLeg" class="title">{{ currentLeg.runner }}</p>
                 </div>
               </div>
               <div class="level-item has-text-centered">
@@ -87,7 +95,7 @@
                       <div class="media">
                         <div class="media-left">
                           <figure class="image is-48x48">
-                            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                            <img class="is-rounded" v-bind:src="leg.image" alt="Placeholder image">
                           </figure>
                         </div>
                         <div class="media-content">
@@ -106,8 +114,9 @@
                       </div>
                     </div>
                     <footer class="card-footer" v-show='reallyOpen'>
+                      <a v-on:click='goToStart(leg)' class="card-footer-item">Go to Start Location</a>
                       <a target='_blank' v-bind:href="getGoogleLink" class="card-footer-item">Open in Google Maps</a>
-                      <a v-on:click='goToStart(leg)' href="#" class="card-footer-item">Go to Start Location</a>
+                      <a v-on:click='goToStart(leg)' class="card-footer-item">Enter Actual Finish</a>
                     </footer>
                   </div>
               </div>
@@ -119,7 +128,6 @@
 
       </div>
     </div>
-
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBScXO8Zhk3DFLWdEHSdwhtaDhlS4d6mlI"></script>
     <script src="./index.js"></script>
   

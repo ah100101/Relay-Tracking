@@ -1,5 +1,5 @@
 #map {
-  height: 100%;
+  height: calc(100vh - 40px);
 }
 
 .leg {
@@ -8,6 +8,18 @@
 
 .card {
   margin: 2rem;
+}
+
+.navbar-item {
+  margin: 1rem;
+}
+
+.current-runner-image {
+  margin: auto;
+}
+
+.media-content {
+  overflow: initial;
 }
 
 .current-runner {
@@ -23,14 +35,6 @@
     background-color: lightblue;
   }
 }
-
-// .upcoming-runner {
-//   background-color: lightgrey;
-// }
-
-// .previous-runner {
-//   background-color: slategrey;
-// }
 
 .road {
   height: 1px;
