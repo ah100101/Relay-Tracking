@@ -1,9 +1,42 @@
-body {
-  max-width: 38rem;
-  padding: 2rem;
-  margin: auto;
+#map {
+  height: 100%;
 }
 
 .leg {
   padding: 1rem;
+}
+
+.card {
+  margin: 2rem;
+}
+
+.current-runner {
+  margin-left: 0;
+  margin-right: 0;
+  .card-header {
+    background-color: lightgreen;
+  }
+}
+
+.next-runner {
+  .card-header {
+    background-color: lightblue;
+  }
+}
+
+// .upcoming-runner {
+//   background-color: lightgrey;
+// }
+
+// .previous-runner {
+//   background-color: slategrey;
+// }
+
+.road {
+  height: 1px;
+  float: left;
+}
+
+.van {
+  height: 36px;
 }

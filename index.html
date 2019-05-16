@@ -1,41 +1,127 @@
 <html>
   <head>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
   </head>
   <body>
-    <div id="app">
-      <h1>Relay Tracker</h1>
-      <div>
-        Race start at: {{ startDateTime }}
-      </div>
-      <div>
-        Now: {{ now }}
-      </div>
-      <div>
-        Time since: {{ formattedStopwatch }}
-      </div>
-      <div>
-        <div v-for='leg in legs'>
-          <div class='leg'>
-            <div>
-              Runner: {{ leg.runner }}
-            </div>
-            <div>
-              Estimated Pace: {{ leg.formattedPace }}
-            </div>
-            <div>
-              Distance: {{ leg.distance }}
-            </div>
-            <div>
-              Start: {{ leg.start }}
-            </div>
-            <div>
-              Finish: {{ leg.finish }}
+    <div class="section is-medium">
+      <div class="container is-fullhd">
+
+        <nav class="navbar">
+          <div class="navbar-menu">
+            <div class="navbar-start">
+              <a class="navbar-item">
+                View Runners
+              </a>
+              <a class="navbar-item">
+                Enter Actuals
+              </a>
             </div>
           </div>
+        </nav>
+
+        <div class="section">
+          <div id="map"></div>
         </div>
+
+        <div id="app">
+          
+          <div class="section">
+              <section>
+            <div class="road" 
+                v-bind:style="road">    
+            </div>
+            <img class="van" src="van.svg"></img>
+            </section>
+            <progress v-bind:value="progress" class="progress is-large is-success" max="100"></progress>
+
+            <nav class="level is-mobile">
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">Elapsed Time</p>
+                  <p class="title">{{ formattedStopwatch }}</p>
+                </div>
+              </div>
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">Current Runner</p>
+                  <p v-if="currentLeg" class="title">{{ currentLeg.runner }}</p>
+                </div>
+              </div>
+              <div class="level-item has-text-centered">
+                  <div>
+                    <p class="heading">Est. Runner Finish Time</p>
+                    <p v-if='currentLeg' class="title">{{ getOnlyTime(currentLeg.finish) }}</p>
+                  </div>
+                </div>
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">Next Runner</p>
+                  <p v-if="nextLeg" class="title">{{ nextLeg.runner }}</p>
+                </div>
+              </div>
+            </nav>
+
+            <div class='leg'>
+              <div is='card' 
+                  inline-template 
+                  v-for='leg in legs'
+                  v-bind:class='getLegClass(leg.id)'
+                  v-bind:leg='leg'>
+                  <div class="card">
+                    <header class="card-header" v-on:click='toggle()'>
+                      <p class="card-header-title">
+                        Leg {{ leg.mapData.leg_number }}: {{ leg.runner }}
+                      </p>
+                      <span class="card-header-icon" aria-label="more options">
+                        <span v-show='reallyOpen' class="icon">
+                          <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                        <span v-show="!reallyOpen" class="icon">
+                          <i class="fas fa-angle-left" aria-hidden="true"></i>
+                        </span>
+                      </span>
+                    </header>
+                    <div class="card-content" v-show='reallyOpen'>
+                      <div class="media">
+                        <div class="media-left">
+                          <figure class="image is-48x48">
+                            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                          </figure>
+                        </div>
+                        <div class="media-content">
+                          <p class="title is-4">Est. Start: {{ getOnlyTime(leg.start) }}</p>
+                          <p class="subtitle is-6">Est. Finish: {{ getOnlyTime(leg.finish) }}</p>
+                        </div>
+                      </div>
+                  
+                      <div class="content">
+                        <div>
+                          Total Distance: {{ leg.distance }} miles
+                        </div>
+                        <div>
+                          Est. Pace {{ leg.formattedPace }} minutes / mile
+                        </div>
+                      </div>
+                    </div>
+                    <footer class="card-footer" v-show='reallyOpen'>
+                      <a target='_blank' v-bind:href="getGoogleLink" class="card-footer-item">Open in Google Maps</a>
+                      <a v-on:click='goToStart(leg)' href="#" class="card-footer-item">Go to Start Location</a>
+                    </footer>
+                  </div>
+              </div>
+            </div>
+            
+          </div>
+
+        </div>
+
       </div>
     </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBScXO8Zhk3DFLWdEHSdwhtaDhlS4d6mlI"></script>
     <script src="./index.js"></script>
+  
   </body>
 </html>
