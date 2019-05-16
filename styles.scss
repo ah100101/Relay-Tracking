@@ -14,10 +14,6 @@
   padding: 1rem;
 }
 
-.card {
-  margin: 2rem;
-}
-
 .navbar-item {
   margin: 1rem;
 }
@@ -26,8 +22,16 @@
   margin: auto;
 }
 
+.media {
+  display: block;
+}
+
 .media-content {
   overflow: initial;
+  margin-bottom: 1rem; 
+  &:last-of-type {
+    margin-bottom: 0;
+  }
 }
 
 .current-runner {
@@ -40,7 +44,23 @@
 
 .next-runner {
   .card-header {
-    background-color: lightblue;
+    background-color: #cd1820;
+  }
+}
+
+.next-runner {
+  .card-header {
+    .card-header-title {
+      color: white;
+    }
+  }
+}
+
+.next-runner {
+  .card-header {
+    .card-header-icon {
+      color: white;
+    }
   }
 }
 
@@ -51,4 +71,44 @@
 
 .van {
   height: 36px;
+}
+
+.card-footer {
+  display: block;
+}
+
+.card-footer-item {
+  border-right: none;
+  background-color: #e1f1f6;
+  font-weight: 700;
+  &:not(:last-child) {
+    border-bottom: 1px solid #dbdbdb;
+  }
+  &:not(:last-child) {
+    border-right: none;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .card {
+    margin: 2rem;
+  }
+  .card-footer {
+    display: flex;
+  }
+  .card-footer-item {
+    border-bottom: none;
+    &:not(:last-child) {
+      border-right: 1px solid #dbdbdb;
+    }
+    &:not(:last-child) {
+      border-bottom: none;
+    }
+  }
+  .media {
+    display: flex;
+  }
+  .media-content {
+    margin-bottom: 0;
+  }
 }
