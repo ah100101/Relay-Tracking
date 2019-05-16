@@ -15,14 +15,14 @@
     <div>
       <div class="container is-fullhd">    
         <div id="app">
-          <section class="hero">
+          <section class="hero" v-cloak>
             <div class="hero-body">
               <div class="container has-text-centered">
                 <h2 class="subtitle">
                   Current Runner
                 </h2>
                 <figure class="current-runner-image image is-128x128">
-                  <img class='is-rounded' src="/runners/hawley.jpg">
+                  <img class='is-rounded' v-bind:src="currentLeg.image">
                 </figure>
                 <h2 class="title">
                   {{ currentLeg.runner }}
@@ -33,7 +33,7 @@
               </div>
             </div>
           </section>
-          <div class="modal" v-bind:class="{ 'is-active': mapOpen }">
+          <div class="modal" v-bind:class="{ 'is-active': mapOpen }" v-cloak>
             <div class="modal-background"></div>
             <div class="modal-content">
               <div id="map"></div>
@@ -41,7 +41,7 @@
             <button v-on:click="mapOpen = false" class="modal-close is-large" aria-label="close"></button>
           </div>
           
-          <div class="section">
+          <div class="section" v-cloak>
               <section>
             <div class="road" 
                 v-bind:style="road">    
@@ -71,7 +71,7 @@
               </div>
             </nav>
 
-            <div class='leg'>
+            <div class='leg' v-cloak>
               <div is='card' 
                   inline-template 
                   v-for='leg in legs'
