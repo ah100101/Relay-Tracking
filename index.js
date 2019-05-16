@@ -214,7 +214,7 @@ var app = new Vue({
             map: state.map,
             icon: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank.png',
             label: {
-              text: (index + 1),
+              text: (index + 1).toString(),
               color: '#000000',
               fontSize: '16px',
               fontWeight: 'bold'
