@@ -153,7 +153,7 @@ var app = new Vue({
     courseDrawn: false,
     map: undefined,
     current: moment(),
-    startTime: '06:30:00',
+    startTime: '06:31:00',
     legs: [],
     mapOpen: false
   },
