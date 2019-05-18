@@ -60,7 +60,7 @@
             <nav class="level is-mobile">
               <div class="level-item has-text-centered">
                 <div>
-                  <p class="heading">Elapsed Time</p>
+                  <p class="heading">Finished Time</p>
                   <p class="title">{{ formattedStopwatch }}</p>
                 </div>
               </div>
@@ -70,12 +70,12 @@
                     <p v-if='currentLeg' class="title">{{ getOnlyTime(currentLeg.finish) }}</p>
                   </div>
                 </div>
-              <div class="level-item has-text-centered">
+              <!-- <div class="level-item has-text-centered">
                 <div>
                   <p class="heading">Next Runner</p>
                   <p v-if="nextLeg" class="title">{{ nextLeg.runner }}</p>
                 </div>
-              </div>
+              </div> -->
             </nav>
 
             <div class='leg' v-cloak>
